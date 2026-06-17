@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Explorer | Home</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="module" src="js/main.js"></script>
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-content">
+            <h1>🍳 RecipeExplorer</h1>
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link active">Browse</a>
+                <a href="leaderboard.html" class="nav-link">My Favorites</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="centered-container column-layout">
+        <section class="search-section">
+            <form id="search-form" class="clean-form">
+                <input type="text" id="search-query" minlength="2" placeholder="Recipe keywords (e.g., Chicken, Pasta...)">
+                
+                <input type="number" id="prep-time-limit" min="1" max="180" placeholder="Max minutes (1-180)">
+                
+                <label class="form-checkbox-label">
+                    <input type="checkbox" id="require-image" checked> Must have photo
+                </label>
+                
+                <select id="category-filter">
+                    <option value="">All Categories</option>
+                </select>
+
+                <button type="submit" class="btn btn-primary">Find Recipes</button>
+            </form>
+            <div id="search-feedback" class="feedback-msg"></div>
+        </section>
+
+        <section id="loading-indicator" class="status-box hidden">
+            <div class="spinner"></div>
+            <p>Gathering fresh ingredients...</p>
+        </section>
+
+        <section id="results-grid" class="options-grid"></section>
+    </main>
+</body>
+</html>

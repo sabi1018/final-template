@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Explorer | Details</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="module" src="js/main.js"></script>
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-content">
+            <h1>🍳 RecipeExplorer</h1>
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link">Browse</a>
+                <a href="leaderboard.html" class="nav-link">My Favorites</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="centered-container">
+        <section id="detail-card" class="card detail-card hidden"></section>
+        
+        <section id="loading-indicator" class="status-box">
+            <div class="spinner"></div>
+            <p>Reading cookbook details...</p>
+        </section>
+        
+        <div id="error-message" class="status-box error hidden">
+            <p>❌ ERROR: Could not retrieve recipe details.</p>
+            <a href="index.html" class="btn btn-outline">Back to Browse</a>
+        </div>
+    </main>
+</body>
+</html>
