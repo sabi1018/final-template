@@ -36,15 +36,33 @@ async function initBrowseRoute() {
 
     searchForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const query = document.getElementById('search-query').value.trim();
-        categoryFilter.value = ""; 
+        
+        const queryInput = document.getElementById('search-query');
+        const timeInput = document.getElementById('prep-time-limit');
+        const query = queryInput.value.trim();
+        const timeLimit = parseInt(timeInput.value, 10);
 
+        feedback.textContent = "";
+
+        if (query.length > 0 && query.length < 2) {
+            feedback.textContent = "❌ Search keyword must be at least 2 characters.";
+            return;
+        }
+
+        if (timeInput.value && (timeLimit < 1 || timeLimit > 180)) {
+            feedback.textContent = "❌ Max minutes must be a number between 1 and 180.";
+            return;
+        }
+
+        categoryFilter.value = ""; 
         executeSearch(() => searchRecipes(query));
     });
 
     categoryFilter.addEventListener('change', async (e) => {
         const selectedCategory = e.target.value;
         document.getElementById('search-query').value = ""; 
+        document.getElementById('prep-time-limit').value = "";
+        feedback.textContent = "";
 
         if (!selectedCategory) {
             executeSearch(() => searchRecipes(''));
@@ -61,13 +79,13 @@ async function initBrowseRoute() {
             const results = await apiCall();
             loader.classList.add('hidden');
             if (results.length === 0) {
-                feedback.textContent = "No culinary entries found matches.";
+                feedback.textContent = "No entries found matching criteria.";
             } else {
                 renderRecipeMatrix(results, grid);
             }
         } catch (error) {
             loader.classList.add('hidden');
-            feedback.textContent = `Network Error: ${error.message}`;
+            feedback.textContent = `❌ Network Connection Error: ${error.message}`;
         }
     }
 }
@@ -76,9 +94,9 @@ function renderRecipeMatrix(meals, grid) {
     grid.innerHTML = '';
     meals.forEach(meal => {
         const card = document.createElement('div');
-        card.className = 'game-card'; 
+        card.className = 'recipe-card'; 
         card.innerHTML = `
-            <img src="${meal.strMealThumb}" alt="${meal.strMeal}" class="game-img">
+            <img src="${meal.strMealThumb}" alt="${meal.strMeal}" class="recipe-img">
             <div class="card-content">
                 <div>
                     <h3>${meal.strMeal}</h3>
@@ -178,10 +196,7 @@ function initFavoritesRoute() {
 
     if (favoriteRecipesState.length === 0) {
         const emptyMsg = document.createElement('p');
-        emptyMsg.className = 'direct-full-width';
-        emptyMsg.style.textAlign = 'center';
-        emptyMsg.style.color = 'var(--text-muted)';
-        emptyMsg.style.gridColumn = '1/-1';
+        emptyMsg.className = 'direct-full-width text-center color-muted grid-span-all';
         emptyMsg.textContent = 'Your culinary watchlist is empty. Go save some favorites!';
         grid.appendChild(emptyMsg);
         return;
@@ -189,15 +204,15 @@ function initFavoritesRoute() {
 
     favoriteRecipesState.forEach((meal, index) => {
         const card = document.createElement('div');
-        card.className = 'game-card';
+        card.className = 'recipe-card';
         card.innerHTML = `
-            <img src="${meal.image}" alt="${meal.name}" class="game-img">
+            <img src="${meal.image}" alt="${meal.name}" class="recipe-img">
             <div class="card-content">
                 <div>
                     <h3>${meal.name}</h3>
                     <span class="category-tag">${meal.category}</span>
                 </div>
-                <div class="column-layout" style="gap: 0.5rem; margin-top: 1rem;">
+                <div class="recipe-card-actions">
                     <button class="btn btn-outline view-details-btn direct-full-width">View Directions</button>
                     <button class="btn btn-danger remove-btn direct-full-width">Delete</button>
                 </div>
